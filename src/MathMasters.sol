@@ -9,7 +9,7 @@ pragma solidity ^0.8.3;
 /// @author Inspired by Solmate (https://github.com/transmissions11/solmate/blob/main/src/utils/FixedPointMathLib.sol)
 library MathMasters {
     /*//////////////////////////////////////////////////////////////
-                                 ERRORS
+                                ERRORS
     //////////////////////////////////////////////////////////////*/
     error MathMasters__FactorialOverflow();
     error MathMasters__MulWadFailed();
