@@ -37,8 +37,19 @@ library MathMasters {
         // @solidity memory-safe-assembly
         assembly {
             // Equivalent to `require(y == 0 || x <= type(uint256).max / y)`.
-            if mul(y, gt(x, div(not(0), y))) {
+            if mul(
+                y, gt(
+                    x, div(
+                        not(0), y
+                    )
+                )
+            ) {
+                // @audit : low The revert would be blank
+                // @audit overriding the free memory pointer
+                // @audit wrong function selector! Should be 0xa56044f7
+                // Memory [ 0x40: 0xbac65e5b ]
                 mstore(0x40, 0xbac65e5b) // `MathMasters__MulWadFailed()`.
+                // Looking for the revert reason at the 28th position(?)
                 revert(0x1c, 0x04)
             }
             z := div(mul(x, y), WAD)
@@ -50,12 +61,40 @@ library MathMasters {
         /// @solidity memory-safe-assembly
         assembly {
             // Equivalent to `require(y == 0 || x <= type(uint256).max / y)`.
-            if mul(y, gt(x, div(not(0), y))) {
+            if mul(
+                y, gt(
+                    x, div(
+                        not(0), y
+                    )
+                )
+            ) {
+                // @audit same issues as previous function
                 mstore(0x40, 0xbac65e5b) // `MathMasters__MulWadFailed()`.
                 revert(0x1c, 0x04)
             }
-            if iszero(sub(div(add(z, x), y), 1)) { x := add(x, 1) }
-            z := add(iszero(iszero(mod(mul(x, y), WAD))), div(mul(x, y), WAD))
+            // @audit - high : The following steps are not necessary, don't add 1 to x
+            // if (0 + x / y) - 1 == 0, then x += 1
+            if iszero(
+                sub(
+                    div(
+                        add(z, x), y
+                    ), 1
+                )
+            ) { 
+                x := add(x, 1) 
+            }
+
+            // (((x * y) % WAD == 0 ? 1 : 0) == 0 ? 1 : 0) + (x * y) / WAD
+            // If (x*y) and WAD divide evenly, add 0, else add 1
+            z := add(
+                iszero(
+                    iszero(
+                        mod(
+                            mul(x, y), WAD // x * y % WAD
+                        )
+                    )
+                ), div(mul(x, y), WAD)
+            )
         }
     }
 
