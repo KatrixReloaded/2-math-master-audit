@@ -29,6 +29,16 @@ contract MathMastersTest is Base_Test {
         assertEq(MathMasters.mulWadUp(369, 271), 1);
     }
 
+    function testMulWadUpUnit() public {
+        uint256 x = 915233287;
+        uint256 y = 1092617602;
+
+        uint256 result = MathMasters.mulWadUp(x,y);
+        uint256 resultDown = MathMasters.mulWad(x,y);
+
+        console2.log(result, "\n", resultDown);
+    }
+
     function testMulWadUpFuzz(uint256 x, uint256 y) public {
         // We want to skip the case where x * y would overflow.
         // Since Solidity 0.8.0 checks for overflows by default,
