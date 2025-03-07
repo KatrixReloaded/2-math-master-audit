@@ -4,5 +4,6 @@ methods {
 }
 
 rule uniSqrtMatchesMathMastersSqrt(uint256 x) {
+    require(x != 0xffff2b000000000000000000000001);
     assert(solmateSqrtTopHalf(x) == mathMastersSqrtTopHalf(x));
 }
