@@ -30,13 +30,14 @@ contract MathMastersTest is Base_Test {
     }
 
     function testMulWadUpUnit() public {
-        uint256 x = 915233287;
-        uint256 y = 1092617602;
+        uint256 x = 0xde0b6b3a7640001;
+        uint256 y = 0xde0b6b3a7640000;
 
         uint256 result = MathMasters.mulWadUp(x,y);
         uint256 resultDown = MathMasters.mulWad(x,y);
 
         console2.log(result, "\n", resultDown);
+        assert(result == resultDown);
     }
 
     function testMulWadUpFuzz(uint256 x, uint256 y) public {
