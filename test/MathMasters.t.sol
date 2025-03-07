@@ -70,7 +70,8 @@ contract MathMastersTest is Base_Test {
         assert(MathMasters.sqrt(x) == uniSqrt(x));
     }
 
-    function testSqrtFuzzSolmate(uint256 x) public pure {
+    function testSqrtFuzzSolmate() public pure {
+        uint256 x = 0xffff2b000000000000000000000001;
         assert(MathMasters.sqrt(x) == solmateSqrt(x));
     }
 }
